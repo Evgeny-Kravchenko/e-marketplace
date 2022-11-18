@@ -15,6 +15,10 @@ export const HeaderLogo = styled(Typography)(({ theme }) => ({
   letterSpacing: '.2rem',
   color: theme.palette.primary.contrastText,
   textDecoration: 'none',
+  fontSize: '2.5rem',
+  [theme.breakpoints.up('md')]: {
+    fontSize: '3rem',
+  },
 })) as typeof Typography;
 
 export const HeaderNavSections = styled('div')(() => ({
@@ -25,4 +29,8 @@ export const HeaderNavSections = styled('div')(() => ({
 export const HeaderNavItem = styled(Link)(({ theme }) => ({
   color: theme.palette.primary.contrastText,
   textDecoration: 'none',
+  fontSize: '1.8rem',
+  [theme.breakpoints.up('md')]: {
+    fontSize: '2rem',
+  },
 }));

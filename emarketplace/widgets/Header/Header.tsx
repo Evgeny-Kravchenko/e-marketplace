@@ -15,7 +15,7 @@ export const Header = (): ReactElement => {
     <HeaderAppBar position='sticky' elevation={3}>
       <HeaderContainer maxWidth='xl' disableGutters>
         <HeaderToolbar component='nav'>
-          <HeaderLogo noWrap variant='h6' component={Link} href='/'>
+          <HeaderLogo noWrap variant='h1' component={Link} href='/'>
             E-Marketplace
           </HeaderLogo>
           <HeaderNavSections>

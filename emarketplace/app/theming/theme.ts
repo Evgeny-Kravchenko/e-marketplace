@@ -16,7 +16,7 @@ const theme = createTheme({
       main: '#556cd6',
     },
     secondary: {
-      main: '#19857b',
+      main: '#D3AC38',
     },
     error: {
       main: red.A400,
@@ -24,6 +24,16 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: roboto.style.fontFamily,
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        html: {
+          height: '100%',
+          fontSize: '10px',
+        },
+      },
+    },
   },
 });
 
