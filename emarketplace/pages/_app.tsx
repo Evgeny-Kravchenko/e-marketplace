@@ -6,6 +6,7 @@ import { CacheProvider, EmotionCache } from '@emotion/react';
 
 import theme from 'app/theming/theme';
 import createEmotionCache from 'app/theming/createEmotionCache';
+import { HttpServiceProvider } from 'shared/libs/httpService/httpServiceProvider';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -18,12 +19,14 @@ export default function App(props: MyAppProps): ReactElement {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   return (
-    <CacheProvider value={emotionCache}>
-      <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </CacheProvider>
+    <HttpServiceProvider>
+      <CacheProvider value={emotionCache}>
+        <ThemeProvider theme={theme}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </CacheProvider>
+    </HttpServiceProvider>
   );
 }
