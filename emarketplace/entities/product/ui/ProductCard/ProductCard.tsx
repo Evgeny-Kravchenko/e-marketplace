@@ -9,18 +9,18 @@ import {
   ProductCardName,
   ProductCardDescription,
   ProductCardPrice,
-  ProductCardAddToCardBtn,
   ProductCardInfoContainer,
 } from './ProductCardStyles';
 
 interface Props {
   product: Product;
+  renderAction?: (id: string) => ReactElement;
 }
 
-export const ProductCard = ({ product }: Props): ReactElement => {
-  const { image, name, description, price } = product;
+export const ProductCard = ({ product, renderAction }: Props): ReactElement => {
+  const { image, name, description, price, id } = product;
   return (
-    <ProductCardContainer>
+    <ProductCardContainer href={`product/${id}`}>
       <ProductCardImageContainer>
         <Image fill src={image} alt={name} />
       </ProductCardImageContainer>
@@ -28,9 +28,7 @@ export const ProductCard = ({ product }: Props): ReactElement => {
         <ProductCardName variant='h3'>{name}</ProductCardName>
         <ProductCardDescription variant='body1'>{description}</ProductCardDescription>
         <ProductCardPrice variant='body1'>${price}</ProductCardPrice>
-        <ProductCardAddToCardBtn fullWidth variant='contained' color='secondary'>
-          Add to cart
-        </ProductCardAddToCardBtn>
+        {renderAction && renderAction(id)}
       </ProductCardInfoContainer>
     </ProductCardContainer>
   );

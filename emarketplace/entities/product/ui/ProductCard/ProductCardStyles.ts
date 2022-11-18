@@ -1,13 +1,23 @@
 import { styled, Typography, Button } from '@mui/material';
+import Link from 'next/link';
 
-export const ProductCardContainer = styled('div')(({ theme }) => ({
+export const ProductCardContainer = styled(Link)(({ theme }) => ({
   height: '100%',
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
-  boxShadow: theme.shadows[5],
+  boxShadow: theme.shadows[3],
   borderRadius: 5,
   overflow: 'hidden',
+  color: 'initial',
+  textDecoration: 'none',
+  transition: '0.2s',
+  '&:hover': {
+    boxShadow: theme.shadows[6],
+    '& img': {
+      transform: 'scale(1.05)',
+    },
+  },
 }));
 
 export const ProductCardImageContainer = styled('div')(() => ({
@@ -16,6 +26,7 @@ export const ProductCardImageContainer = styled('div')(() => ({
   overflow: 'hidden',
   position: 'relative',
   '& img': {
+    transition: '0.2s',
     objectFit: 'cover',
   },
 }));
@@ -46,8 +57,4 @@ export const ProductCardDescription = styled(Typography)(({ theme }) => ({
 export const ProductCardPrice = styled(Typography)(({ theme }) => ({
   fontSize: '1.6rem',
   marginBottom: theme.spacing(2),
-}));
-
-export const ProductCardAddToCardBtn = styled(Button)(() => ({
-  fontSize: '2rem',
 }));

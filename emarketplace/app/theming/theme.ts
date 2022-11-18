@@ -16,7 +16,7 @@ const theme = createTheme({
       main: '#556cd6',
     },
     secondary: {
-      main: '#D3AC38',
+      main: '#FCCD44',
     },
     error: {
       main: red.A400,
@@ -31,6 +31,15 @@ const theme = createTheme({
         html: {
           height: '100%',
           fontSize: '10px',
+        },
+      },
+    },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          textDecoration: 'none',
+          fontSize: '1.6rem',
+          color: '#556cd6',
         },
       },
     },
