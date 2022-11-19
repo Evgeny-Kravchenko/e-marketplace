@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import { Header, Footer } from 'widgets';
 import { MainLayout } from 'shared/layouts';
-import { getProducts, Product } from 'shared/api';
+import { typicodeApi, Product } from 'shared/api';
 import { ProductPurchaseInfo } from 'entities/product';
 import { AddToCart } from 'features';
 
@@ -19,16 +19,17 @@ import {
 } from './styles';
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const response = await typicodeApi.getProducts();
   return {
-    paths: getProducts().data.map((product) => ({ params: { slug: product.id } })),
+    paths: response.data.map((product) => ({ params: { slug: product.id } })),
     fallback: false,
   };
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { slug } = context.params;
-  const products = getProducts();
-  const product = products.data.find((item) => item.id === slug);
+  const response = await typicodeApi.getProducts();
+  const product = response.data.find((item) => item.id === slug);
 
   if (!product) {
     return {
@@ -46,8 +47,18 @@ interface Props {
 }
 
 const ProductDetails = ({ product }: Props): ReactElement => {
-  const { id, name, image, brand, rating, numReviews, description, price, countInStock } =
-    product;
+  const {
+    id,
+    name,
+    image,
+    brand,
+    rating,
+    numReviews,
+    description,
+    price,
+    countInStock,
+    category,
+  } = product;
 
   const status = countInStock > 0 ? 'In stock' : 'Unavailable';
 
@@ -65,7 +76,9 @@ const ProductDetails = ({ product }: Props): ReactElement => {
               <ProductDetailsInfoItemText>{name}</ProductDetailsInfoItemText>
             </ProductDetailsInfoItem>
             <ProductDetailsInfoItem>
-              <ProductDetailsInfoItemText>Category: {name}</ProductDetailsInfoItemText>
+              <ProductDetailsInfoItemText>
+                Category: {category}
+              </ProductDetailsInfoItemText>
             </ProductDetailsInfoItem>
             <ProductDetailsInfoItem>
               <ProductDetailsInfoItemText>Brand: {brand}</ProductDetailsInfoItemText>
@@ -85,7 +98,7 @@ const ProductDetails = ({ product }: Props): ReactElement => {
             id={id}
             price={`$${price}`}
             status={status}
-            renderAction={(id: string) => <AddToCart id={id} />}
+            renderAction={(id: string) => <AddToCart id={id} numInStock={countInStock} />}
           />
         </ProductDetailsContent>
       </ProductDetailsContainer>

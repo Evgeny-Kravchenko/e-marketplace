@@ -10,7 +10,14 @@ import {
   HeaderNavItem,
 } from './HeaderStyles';
 
+import { orderModel } from 'entities/order';
+import { withBadge } from 'shared/hocs';
+
+const CartItem = withBadge(() => <HeaderNavItem href='/cart'>Cart</HeaderNavItem>);
+
 export const Header = (): ReactElement => {
+  const orderCount = orderModel.useOrderCount();
+
   return (
     <HeaderAppBar position='sticky' elevation={3}>
       <HeaderContainer maxWidth='xl' disableGutters>
@@ -19,7 +26,8 @@ export const Header = (): ReactElement => {
             E-Marketplace
           </HeaderLogo>
           <HeaderNavSections>
-            <HeaderNavItem href='/cart'>Cart</HeaderNavItem>
+            <CartItem badgeValue={orderCount} />
+
             <HeaderNavItem href='/login'>Login</HeaderNavItem>
           </HeaderNavSections>
         </HeaderToolbar>

@@ -3,24 +3,25 @@ import { GetStaticProps } from 'next';
 
 import { MainLayout } from 'shared/layouts';
 import { Header, Footer } from 'widgets';
-import { getProducts, getProductsReturn } from 'shared/api';
+import { typicodeApi } from 'shared/api';
 import { ProductCard } from 'entities/product';
 import { AddToCart } from 'features';
 
 import { ProductsListContainer, ProductsListItemContainer } from './styles';
 
 export const getStaticProps: GetStaticProps<{
-  products: getProductsReturn;
+  products: typicodeApi.getProductsReturn;
 }> = async () => {
+  const data = await typicodeApi.getProducts();
   return {
     props: {
-      products: getProducts(),
+      products: data,
     },
   };
 };
 
 interface Props {
-  products: getProductsReturn;
+  products: typicodeApi.getProductsReturn;
 }
 
 export default function Home({ products }: Props): ReactElement {
@@ -34,7 +35,9 @@ export default function Home({ products }: Props): ReactElement {
               <ProductCard
                 key={product.id}
                 product={product}
-                renderAction={(id: string) => <AddToCart id={id} />}
+                renderAction={(id: string) => (
+                  <AddToCart id={id} numInStock={product.countInStock} />
+                )}
               />
             </ProductsListItemContainer>
           ))}

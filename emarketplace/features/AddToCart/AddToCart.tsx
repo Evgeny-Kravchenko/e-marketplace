@@ -1,16 +1,23 @@
 import React, { ReactElement, PointerEvent } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { addItemToOrder } from 'entities/order/model';
 
 import { Button } from '@mui/material';
 
 interface Props {
   id: string;
+  numInStock: number;
 }
 
-export const AddToCart = ({ id }: Props): ReactElement => {
+export const AddToCart = ({ id, numInStock }: Props): ReactElement => {
+  const dispatch = useDispatch();
+
   const onAddToCart = (e: PointerEvent<HTMLButtonElement>): void => {
-    alert(`Add ${id} to cart`);
     e.stopPropagation();
     e.preventDefault();
+
+    dispatch(addItemToOrder({ id, numInStock }));
   };
 
   return (
