@@ -3,7 +3,7 @@ import { GetStaticProps } from 'next';
 
 import { MainLayout } from 'shared/layouts';
 import { Header, Footer } from 'widgets';
-import { typicodeApi } from 'shared/api';
+import { typicodeApi, Product } from 'shared/api';
 import { ProductCard } from 'entities/product';
 import { AddToCart } from 'features';
 
@@ -35,8 +35,8 @@ export default function Home({ products }: Props): ReactElement {
               <ProductCard
                 key={product.id}
                 product={product}
-                renderAction={(id: string) => (
-                  <AddToCart id={id} numInStock={product.countInStock} />
+                renderAction={(orderItem: Product) => (
+                  <AddToCart orderItem={orderItem} numInStock={product.countInStock} />
                 )}
               />
             </ProductsListItemContainer>

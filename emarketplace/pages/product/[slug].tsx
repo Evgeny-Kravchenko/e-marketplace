@@ -98,7 +98,10 @@ const ProductDetails = ({ product }: Props): ReactElement => {
             id={id}
             price={`$${price}`}
             status={status}
-            renderAction={(id: string) => <AddToCart id={id} numInStock={countInStock} />}
+            product={product}
+            renderAction={(orderItem: Product) => (
+              <AddToCart orderItem={orderItem} numInStock={countInStock} />
+            )}
           />
         </ProductDetailsContent>
       </ProductDetailsContainer>

@@ -1,10 +1,5 @@
 import { styled, Paper, List, ListItem, ListItemText } from '@mui/material';
 
-export const ProductPurchaseInfoContainer = styled(Paper)(({ theme }) => ({
-  height: 'fit-content',
-  padding: theme.spacing(2),
-})) as typeof Paper;
-
 export const ProductPurchaseInfoList = styled(List)(({ theme }) => ({
   padding: 0,
 }));

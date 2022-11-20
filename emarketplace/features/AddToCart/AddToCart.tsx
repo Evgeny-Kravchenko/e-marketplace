@@ -1,23 +1,27 @@
 import React, { ReactElement, PointerEvent } from 'react';
 import { useDispatch } from 'react-redux';
-
-import { addItemToOrder } from 'entities/order/model';
+import { useRouter } from 'next/router';
 
 import { Button } from '@mui/material';
 
+import { addItemToOrder } from 'entities/order/model';
+import { Product } from 'shared/api';
+
 interface Props {
-  id: string;
+  orderItem: Product;
   numInStock: number;
 }
 
-export const AddToCart = ({ id, numInStock }: Props): ReactElement => {
+export const AddToCart = ({ orderItem, numInStock }: Props): ReactElement => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const onAddToCart = (e: PointerEvent<HTMLButtonElement>): void => {
     e.stopPropagation();
     e.preventDefault();
 
-    dispatch(addItemToOrder({ id, numInStock }));
+    dispatch(addItemToOrder({ orderItem, numInStock }));
+    router.push('/cart');
   };
 
   return (

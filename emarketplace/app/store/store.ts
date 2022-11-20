@@ -1,11 +1,21 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 
 import { orderModel } from 'entities/order';
 
+const persistConfig = {
+  key: 'root',
+  storage,
+};
+
+const reducers = combineReducers({ order: orderModel.reducer });
+
+const persistedReducer = persistReducer(persistConfig, reducers);
+
 export const store = configureStore({
-  reducer: {
-    order: orderModel.reducer,
-  },
+  devTools: true,
+  reducer: persistedReducer,
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

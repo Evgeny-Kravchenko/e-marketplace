@@ -2,8 +2,10 @@ import React, { ReactElement } from 'react';
 
 import { Box } from '@mui/material';
 
+import { Product } from 'shared/api';
+import { Paper } from 'shared/ui';
+
 import {
-  ProductPurchaseInfoContainer,
   ProductPurchaseInfoList,
   ProductPurchaseInfoItem,
   ProductPurchaseInfoItemText,
@@ -13,7 +15,8 @@ interface Props {
   id: string;
   price: string;
   status: string;
-  renderAction?: (id: string) => ReactElement;
+  product: Product;
+  renderAction?: (orderItem: Product) => ReactElement;
 }
 
 export const ProductPurchaseInfo = ({
@@ -21,9 +24,10 @@ export const ProductPurchaseInfo = ({
   price,
   status,
   renderAction,
+  product,
 }: Props): ReactElement => {
   return (
-    <ProductPurchaseInfoContainer component='section' elevation={3}>
+    <Paper>
       <ProductPurchaseInfoList dense>
         <ProductPurchaseInfoItem>
           <ProductPurchaseInfoItemText>Price</ProductPurchaseInfoItemText>
@@ -34,7 +38,7 @@ export const ProductPurchaseInfo = ({
           <ProductPurchaseInfoItemText>{status}</ProductPurchaseInfoItemText>
         </ProductPurchaseInfoItem>
       </ProductPurchaseInfoList>
-      {renderAction && <Box sx={{ mt: 2 }}>{renderAction(id)}</Box>}
-    </ProductPurchaseInfoContainer>
+      {renderAction && <Box sx={{ mt: 2 }}>{renderAction(product)}</Box>}
+    </Paper>
   );
 };

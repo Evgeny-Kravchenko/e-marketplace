@@ -14,7 +14,7 @@ import {
 
 interface Props {
   product: Product;
-  renderAction?: (id: string) => ReactElement;
+  renderAction?: (orderItem: Product) => ReactElement;
 }
 
 export const ProductCard = ({ product, renderAction }: Props): ReactElement => {
@@ -28,7 +28,7 @@ export const ProductCard = ({ product, renderAction }: Props): ReactElement => {
         <ProductCardName variant='h3'>{name}</ProductCardName>
         <ProductCardDescription variant='body1'>{description}</ProductCardDescription>
         <ProductCardPrice variant='body1'>${price}</ProductCardPrice>
-        {renderAction && renderAction(id)}
+        {renderAction && renderAction(product)}
       </ProductCardInfoContainer>
     </ProductCardContainer>
   );

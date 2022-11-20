@@ -3,9 +3,10 @@ import { useSelector } from 'react-redux';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from 'app/store';
+import { Product } from 'shared/api';
 
 export interface OrderState {
-  orderItems: { id: string; count: number }[];
+  orderItems: { orderItem: Product; count: number }[];
 }
 
 const initialState: OrderState = {
@@ -18,7 +19,7 @@ export const orderModel = createSlice({
   reducers: {
     addItemToOrder: (
       state,
-      action: PayloadAction<{ id: string; numInStock: number }>
+      action: PayloadAction<{ orderItem: Product; numInStock: number }>
     ) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
@@ -28,7 +29,7 @@ export const orderModel = createSlice({
         return;
       }
       const qantityInCart = state.orderItems.find(
-        (item) => item.id === action.payload.id
+        (item) => item.orderItem.id === action.payload.orderItem.id
       );
 
       if (qantityInCart) {
@@ -37,11 +38,18 @@ export const orderModel = createSlice({
           return;
         }
         state.orderItems = state.orderItems.map((order) =>
-          order.id === action.payload.id ? { ...order, count: order.count + 1 } : order
+          order.orderItem.id === action.payload.orderItem.id
+            ? { ...order, count: order.count + 1 }
+            : order
         );
       } else {
-        state.orderItems.push({ id: action.payload.id, count: 1 });
+        state.orderItems.push({ orderItem: action.payload.orderItem, count: 1 });
       }
+    },
+    deleteItemFromOrder(state, action: PayloadAction<{ id: string }>) {
+      state.orderItems = state.orderItems.filter(
+        (item) => item.orderItem.id !== action.payload.id
+      );
     },
   },
 });
@@ -56,6 +64,34 @@ export const useOrderCount = (): number =>
     )
   );
 
+export const useOrderItems = (): { orderItem: Product; count: number }[] =>
+  useSelector(
+    createSelector(
+      (state: RootState) => state.order,
+      (order) => order.orderItems
+    )
+  );
+
+export const useIsOrderItemsEmpty = (): boolean =>
+  useSelector(
+    createSelector(
+      (state: RootState) => state.order.orderItems,
+      (orderItems) => !orderItems.length
+    )
+  );
+
+export const useOrderTotalPrice = (): number =>
+  useSelector(
+    createSelector(
+      (state: RootState) => state.order.orderItems,
+      (items) =>
+        items.reduce(
+          (acc, item) => acc + item.count * parseFloat(item.orderItem.price),
+          0
+        )
+    )
+  );
+
 // Action creators are generated for each case reducer function
-export const { addItemToOrder } = orderModel.actions;
+export const { addItemToOrder, deleteItemFromOrder } = orderModel.actions;
 export const reducer = orderModel.reducer;
