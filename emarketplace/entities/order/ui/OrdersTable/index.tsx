@@ -8,10 +8,14 @@ import { Table } from 'shared/ui';
 import { Product } from 'shared/api';
 
 interface generateColumnsProps {
-  renderAction: (id: string) => ReactElement;
+  renderDeleteFeature: (id: string) => ReactElement;
+  renderChangeQuantityFeature: (product: Product) => ReactElement;
 }
 
-const generateColumns: any = ({ renderAction }: generateColumnsProps) => [
+const generateColumns: any = ({
+  renderDeleteFeature,
+  renderChangeQuantityFeature,
+}: generateColumnsProps) => [
   {
     id: 'itemName',
     Header: 'Item',
@@ -44,7 +48,11 @@ const generateColumns: any = ({ renderAction }: generateColumnsProps) => [
   {
     id: 'qantity',
     Header: 'Qantity',
-    accessor: 'count',
+    Cell: (props: CellProps<Product>) => (
+      <Box sx={{ width: 'fit-content' }}>
+        {renderChangeQuantityFeature(props.row.original)}
+      </Box>
+    ),
   },
   {
     id: 'price',
@@ -54,19 +62,27 @@ const generateColumns: any = ({ renderAction }: generateColumnsProps) => [
   {
     id: 'action',
     Header: 'Action',
-    Cell: (props: CellProps<Product>) => renderAction(props.row.original.id),
+    Cell: (props: CellProps<Product>) => renderDeleteFeature(props.row.original.id),
   },
 ];
 
 interface Props {
   data: { orderItem: Product; count: number }[];
-  renderAction?: (id: string) => ReactElement;
+  renderDeleteFeature?: (id: string) => ReactElement;
+  renderChangeQuantityFeature?: (orderItem: Product) => ReactElement;
 }
 
-export const OrdersTable = ({ data, renderAction }: Props): ReactElement => {
+export const OrdersTable = ({
+  data,
+  renderDeleteFeature,
+  renderChangeQuantityFeature,
+}: Props): ReactElement => {
   const normilizedData = data.map((item) => ({ ...item.orderItem, count: item.count }));
 
-  const columns = useMemo(() => generateColumns({ renderAction }), [renderAction]);
+  const columns = useMemo(
+    () => generateColumns({ renderDeleteFeature, renderChangeQuantityFeature }),
+    [renderDeleteFeature, renderChangeQuantityFeature]
+  );
 
   return (
     <Table

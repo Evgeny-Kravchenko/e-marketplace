@@ -19,7 +19,12 @@ export const orderModel = createSlice({
   reducers: {
     addItemToOrder: (
       state,
-      action: PayloadAction<{ orderItem: Product; numInStock: number }>
+      action: PayloadAction<{
+        orderItem: Product;
+        numInStock: number;
+        count: number;
+        replaceCount?: boolean;
+      }>
     ) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
@@ -28,22 +33,36 @@ export const orderModel = createSlice({
       if (!action.payload.numInStock) {
         return;
       }
+      if (
+        action.payload.replaceCount &&
+        action.payload.orderItem.countInStock > action.payload.count
+      ) {
+        state.orderItems = state.orderItems.map((order) =>
+          order.orderItem.id === action.payload.orderItem.id
+            ? { ...order, count: action.payload.count }
+            : order
+        );
+        return;
+      }
       const qantityInCart = state.orderItems.find(
         (item) => item.orderItem.id === action.payload.orderItem.id
       );
 
       if (qantityInCart) {
-        if (qantityInCart.count + 1 > action.payload.numInStock) {
+        if (qantityInCart.count + action.payload.count > action.payload.numInStock) {
           alert('Product is out of stock');
           return;
         }
         state.orderItems = state.orderItems.map((order) =>
           order.orderItem.id === action.payload.orderItem.id
-            ? { ...order, count: order.count + 1 }
+            ? { ...order, count: order.count + action.payload.count }
             : order
         );
       } else {
-        state.orderItems.push({ orderItem: action.payload.orderItem, count: 1 });
+        state.orderItems.push({
+          orderItem: action.payload.orderItem,
+          count: action.payload.count,
+        });
       }
     },
     deleteItemFromOrder(state, action: PayloadAction<{ id: string }>) {
@@ -89,6 +108,14 @@ export const useOrderTotalPrice = (): number =>
           (acc, item) => acc + item.count * parseFloat(item.orderItem.price),
           0
         )
+    )
+  );
+
+export const useOrderItemQuantityById = (id: string): number =>
+  useSelector(
+    createSelector(
+      (state: RootState) => state.order.orderItems,
+      (items) => items.find((item) => item.orderItem.id === id).count || 0
     )
   );
 

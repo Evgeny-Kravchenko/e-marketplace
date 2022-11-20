@@ -20,7 +20,7 @@ export const AddToCart = ({ orderItem, numInStock }: Props): ReactElement => {
     e.stopPropagation();
     e.preventDefault();
 
-    dispatch(addItemToOrder({ orderItem, numInStock }));
+    dispatch(addItemToOrder({ orderItem, numInStock, count: 1 }));
     router.push('/cart');
   };
 

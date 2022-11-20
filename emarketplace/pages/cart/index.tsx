@@ -12,7 +12,8 @@ import {
   useOrderTotalPrice,
 } from 'entities/order/model';
 import { OrdersTable, OrdersResult } from 'entities/order/ui';
-import { DeleteFromCart, CheckoutOrder } from 'features';
+import { DeleteFromCart, CheckoutOrder, ChangeOrderQuantity } from 'features';
+import { Product } from 'shared/api';
 
 import {
   ShoppingCartPageTitle,
@@ -26,6 +27,11 @@ const Cart = (): ReactElement => {
   const orderCount = useOrderCount();
   const isOrderItemsEmpty = useIsOrderItemsEmpty();
   const orderTotalPrice = useOrderTotalPrice();
+
+  const changeOrderQuantity = useCallback(
+    (orderItem: Product) => <ChangeOrderQuantity orderItem={orderItem} />,
+    []
+  );
 
   const deleteFromCartFeature = useCallback(
     (id: string) => <DeleteFromCart id={id} />,
@@ -42,7 +48,11 @@ const Cart = (): ReactElement => {
         <ShoppingCartContentContainer>
           <ShoppingCartTableContainer>
             {!isOrderItemsEmpty && (
-              <OrdersTable data={orderItems} renderAction={deleteFromCartFeature} />
+              <OrdersTable
+                data={orderItems}
+                renderDeleteFeature={deleteFromCartFeature}
+                renderChangeQuantityFeature={changeOrderQuantity}
+              />
             )}
             {isOrderItemsEmpty && (
               <Typography variant='body1' sx={{ fontSize: '2rem' }}>
