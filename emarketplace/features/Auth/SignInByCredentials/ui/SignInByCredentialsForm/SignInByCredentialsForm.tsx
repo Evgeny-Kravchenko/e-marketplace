@@ -1,10 +1,13 @@
 import React, { ReactElement } from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
+import { toast } from 'react-toastify';
 
 import { Typography, Stack, Button } from '@mui/material';
 
 import { SeparateLabelInputWrapper, TextField } from 'shared/ui';
+import { getError } from 'shared/utils';
 
 import { SignInForm } from './SignInByCredentialsFormStyles';
 
@@ -19,8 +22,19 @@ export const SignInByCredentialsForm = (): ReactElement => {
     mode: 'onChange',
   });
 
-  const onSubmit = (data: SignInForm): void => {
-    console.log(data);
+  const onSubmit = async (data: SignInForm): Promise<void> => {
+    try {
+      const result = await signIn('credentials', {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      });
+      if (result.error) {
+        toast.error(result.error);
+      }
+    } catch (err) {
+      toast.error(getError(err as Error));
+    }
   };
 
   return (

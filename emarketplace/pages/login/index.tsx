@@ -1,4 +1,6 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 import { Header, Footer } from 'widgets';
 import { MainLayout } from 'shared/layouts';
@@ -8,6 +10,16 @@ import { PageTitle } from 'shared/ui';
 import { SignInFormContainer } from './styles';
 
 const Login = (): ReactElement => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const { redirect } = router.query;
+
+  useEffect(() => {
+    if (session?.user) {
+      router.push((redirect as string) || '/');
+    }
+  }, [router, session, redirect]);
+
   return (
     <MainLayout title='Login'>
       <Header />

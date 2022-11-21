@@ -6,6 +6,7 @@ import { CacheProvider, EmotionCache } from '@emotion/react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
+import { SessionProvider } from 'next-auth/react';
 
 import theme from 'app/theming/theme';
 import createEmotionCache from 'app/theming/createEmotionCache';
@@ -22,22 +23,28 @@ interface MyAppProps extends AppProps {
 }
 
 function App(props: MyAppProps): ReactElement {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const {
+    Component,
+    emotionCache = clientSideEmotionCache,
+    pageProps: { session, ...pageProps },
+  } = props;
 
   return (
-    <HttpServiceProvider>
-      <Provider store={store}>
-        <PersistGate loading={<p>Loading...</p>} persistor={persistor}>
-          <CacheProvider value={emotionCache}>
-            <ThemeProvider theme={theme}>
-              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-              <CssBaseline />
-              <Component {...pageProps} />
-            </ThemeProvider>
-          </CacheProvider>
-        </PersistGate>
-      </Provider>
-    </HttpServiceProvider>
+    <SessionProvider session={session}>
+      <HttpServiceProvider>
+        <Provider store={store}>
+          <PersistGate loading={<p>Loading...</p>} persistor={persistor}>
+            <CacheProvider value={emotionCache}>
+              <ThemeProvider theme={theme}>
+                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                <CssBaseline />
+                <Component {...pageProps} />
+              </ThemeProvider>
+            </CacheProvider>
+          </PersistGate>
+        </Provider>
+      </HttpServiceProvider>
+    </SessionProvider>
   );
 }
 

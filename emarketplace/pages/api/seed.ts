@@ -21,7 +21,7 @@ const users = [
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   await db.connect();
   await User.deleteMany();
-  await User.insertMany(users);
+  await (User as any).insertMany(users);
   await db.disconnect();
   res.send({ message: 'seeded successfully' });
 };

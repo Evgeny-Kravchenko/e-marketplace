@@ -1,5 +1,8 @@
 import React, { ReactElement } from 'react';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+
+import { Typography } from '@mui/material';
 
 import {
   HeaderContainer,
@@ -18,6 +21,8 @@ const CartItem = withBadge(() => <HeaderNavItem href='/cart'>Cart</HeaderNavItem
 export const Header = (): ReactElement => {
   const orderCount = orderModel.useOrderCount();
 
+  const { status, data: session } = useSession();
+
   return (
     <HeaderAppBar position='sticky' elevation={3}>
       <HeaderContainer maxWidth='xl' disableGutters>
@@ -27,8 +32,24 @@ export const Header = (): ReactElement => {
           </HeaderLogo>
           <HeaderNavSections>
             <CartItem badgeValue={orderCount} />
-
-            <HeaderNavItem href='/login'>Login</HeaderNavItem>
+            {status === 'loading' && (
+              <Typography
+                variant='h5'
+                sx={{ fontSize: '2rem', display: 'flex', alignItems: 'center' }}
+              >
+                Loading...
+              </Typography>
+            )}
+            {session?.user && status !== 'loading' ? (
+              <Typography
+                variant='h5'
+                sx={{ fontSize: '2rem', display: 'flex', alignItems: 'center' }}
+              >
+                {session.user.name}
+              </Typography>
+            ) : (
+              <HeaderNavItem href='/login'>Login</HeaderNavItem>
+            )}
           </HeaderNavSections>
         </HeaderToolbar>
       </HeaderContainer>
