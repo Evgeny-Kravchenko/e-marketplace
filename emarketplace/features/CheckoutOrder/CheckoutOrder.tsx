@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 export const CheckoutOrder = (): ReactElement => {
   const router = useRouter();
   const checkoutOrder = (): void => {
-    router.push('/shipping');
+    router.push('login?redirect=/shipping');
   };
 
   return (

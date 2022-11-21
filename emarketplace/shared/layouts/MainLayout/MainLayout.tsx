@@ -24,9 +24,9 @@ export const MainLayout = ({ children, title }: Props): ReactElement => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <LayoutContainer>
-        <LayoutHeaderContainer>{header}</LayoutHeaderContainer>
+        {header && <LayoutHeaderContainer>{header}</LayoutHeaderContainer>}
         <LayoutContentContainer maxWidth='xl'>{content}</LayoutContentContainer>
-        <LayoutFooterContainer>{footer}</LayoutFooterContainer>
+        {footer && <LayoutFooterContainer>{footer}</LayoutFooterContainer>}
       </LayoutContainer>
     </>
   );

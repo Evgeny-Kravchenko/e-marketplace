@@ -1,13 +1,4 @@
-import { styled, Typography } from '@mui/material';
-
-export const ShoppingCartPageTitle = styled(Typography)(({ theme }) => ({
-  marginBottom: theme.spacing(4),
-  fontSize: '2.5rem',
-  fontWeight: theme.typography.fontWeightMedium,
-  [theme.breakpoints.up('md')]: {
-    fontSize: '3rem',
-  },
-}));
+import { styled } from '@mui/material';
 
 export const ShoppingCartContentContainer = styled('div')(({ theme }) => ({
   display: 'grid',

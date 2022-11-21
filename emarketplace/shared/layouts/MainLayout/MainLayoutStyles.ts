@@ -10,6 +10,8 @@ export const LayoutContainer = styled('div')(() => ({
 export const LayoutHeaderContainer = styled('div')(() => ({}));
 
 export const LayoutContentContainer = styled(Container)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
   flexGrow: 1,
   paddingTop: theme.spacing(2),
   paddingBottom: theme.spacing(2),

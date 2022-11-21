@@ -14,9 +14,9 @@ import {
 import { OrdersTable, OrdersResult } from 'entities/order/ui';
 import { DeleteFromCart, CheckoutOrder, ChangeOrderQuantity } from 'features';
 import { Product } from 'shared/api';
+import { PageTitle } from 'shared/ui';
 
 import {
-  ShoppingCartPageTitle,
   ShoppingCartContentContainer,
   ShoppingCartTableContainer,
   ShoppingCartCheckoutContainer,
@@ -44,7 +44,7 @@ const Cart = (): ReactElement => {
     <MainLayout title='Shopping cart'>
       <Header />
       <main>
-        <ShoppingCartPageTitle variant='h1'>Shopping cart</ShoppingCartPageTitle>
+        <PageTitle>Shopping cart</PageTitle>
         <ShoppingCartContentContainer>
           <ShoppingCartTableContainer>
             {!isOrderItemsEmpty && (
