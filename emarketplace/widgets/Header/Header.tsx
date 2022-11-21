@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useMemo } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 
@@ -13,15 +13,39 @@ import {
   HeaderNavItem,
 } from './HeaderStyles';
 
+import { useSignOut } from 'features/Auth/SignOut';
 import { orderModel } from 'entities/order';
 import { withBadge } from 'shared/hocs';
+import { DropdownMenu, DropdownMenuItem } from 'shared/ui';
 
-const CartItem = withBadge(() => <HeaderNavItem href='/cart'>Cart</HeaderNavItem>);
+const CartItem = withBadge(() => (
+  <HeaderNavItem
+    href='/cart'
+    sx={{ fontSize: '2rem', display: 'flex', alignItems: 'center' }}
+  >
+    Cart
+  </HeaderNavItem>
+));
+
+const generateDropdownMenuItems = (
+  signOut: () => Promise<undefined>
+): DropdownMenuItem[] => {
+  return [
+    { id: 'profile', label: 'Profile', href: '/profile' },
+    { id: 'orderHistory', label: 'Order History', href: '/order-history' },
+    { id: 'logout', label: 'Logout', action: signOut },
+  ];
+};
 
 export const Header = (): ReactElement => {
   const orderCount = orderModel.useOrderCount();
+  const signOut = useSignOut();
 
   const { status, data: session } = useSession();
+
+  const dropdownMenuItems = useMemo(() => {
+    return generateDropdownMenuItems(signOut);
+  }, [signOut]);
 
   return (
     <HeaderAppBar position='sticky' elevation={3}>
@@ -41,12 +65,7 @@ export const Header = (): ReactElement => {
               </Typography>
             )}
             {session?.user && status !== 'loading' ? (
-              <Typography
-                variant='h5'
-                sx={{ fontSize: '2rem', display: 'flex', alignItems: 'center' }}
-              >
-                {session.user.name}
-              </Typography>
+              <DropdownMenu label={session.user.name} items={dropdownMenuItems} />
             ) : (
               <HeaderNavItem href='/login'>Login</HeaderNavItem>
             )}

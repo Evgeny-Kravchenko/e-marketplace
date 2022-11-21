@@ -70,6 +70,9 @@ export const orderModel = createSlice({
         (item) => item.orderItem.id !== action.payload.id
       );
     },
+    clearOrder(state) {
+      state.orderItems = [];
+    },
   },
 });
 
@@ -120,5 +123,5 @@ export const useOrderItemQuantityById = (id: string): number =>
   );
 
 // Action creators are generated for each case reducer function
-export const { addItemToOrder, deleteItemFromOrder } = orderModel.actions;
+export const { addItemToOrder, deleteItemFromOrder, clearOrder } = orderModel.actions;
 export const reducer = orderModel.reducer;
