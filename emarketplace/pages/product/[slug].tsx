@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetStaticProps } from 'next';
 import Image from 'next/image';
 
 import { Header, Footer } from 'widgets';
@@ -17,25 +17,11 @@ import {
   ProductDetailsInfoItem,
   ProductDetailsInfoItemText,
 } from './styles';
+import { Typography } from '@mui/material';
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const response = await typicodeApi.getProducts();
-  return {
-    paths: response.data.map((product) => ({ params: { slug: product.id } })),
-    fallback: false,
-  };
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetStaticProps = async (context) => {
   const { slug } = context.params;
-  const response = await typicodeApi.getProducts();
-  const product = response.data.find((item) => item.id === slug);
-
-  if (!product) {
-    return {
-      notFound: true,
-    };
-  }
+  const product = await typicodeApi.getProductById(slug as string);
 
   return {
     props: { product },
@@ -58,7 +44,7 @@ const ProductDetails = ({ product }: Props): ReactElement => {
     price,
     countInStock,
     category,
-  } = product;
+  } = product || {};
 
   const status = countInStock > 0 ? 'In stock' : 'Unavailable';
 
@@ -68,41 +54,46 @@ const ProductDetails = ({ product }: Props): ReactElement => {
       <ProductDetailsContainer>
         <ProductDetailsLink href='/'>{`<-- Back to products`}</ProductDetailsLink>
         <ProductDetailsContent>
-          <ProductDetailsImageContainer>
-            <Image fill alt={name} src={image} />
-          </ProductDetailsImageContainer>
-          <ProductDetailsInfoContainer dense>
-            <ProductDetailsInfoItem>
-              <ProductDetailsInfoItemText>{name}</ProductDetailsInfoItemText>
-            </ProductDetailsInfoItem>
-            <ProductDetailsInfoItem>
-              <ProductDetailsInfoItemText>
-                Category: {category}
-              </ProductDetailsInfoItemText>
-            </ProductDetailsInfoItem>
-            <ProductDetailsInfoItem>
-              <ProductDetailsInfoItemText>Brand: {brand}</ProductDetailsInfoItemText>
-            </ProductDetailsInfoItem>
-            <ProductDetailsInfoItem>
-              <ProductDetailsInfoItemText>
-                {rating} of {numReviews} reviews
-              </ProductDetailsInfoItemText>
-            </ProductDetailsInfoItem>
-            <ProductDetailsInfoItem>
-              <ProductDetailsInfoItemText>
-                Description: {description}
-              </ProductDetailsInfoItemText>
-            </ProductDetailsInfoItem>
-          </ProductDetailsInfoContainer>
-          <ProductPurchaseInfo
-            id={id}
-            price={`$${price}`}
-            status={status}
-            product={product}
-            renderAction={(orderItem: Product) => (
-              <AddToCart orderItem={orderItem} numInStock={countInStock} />
-            )}
-          />
+          {!product && <Typography variant='h3'>Product is not found</Typography>}
+          {product && (
+            <>
+              <ProductDetailsImageContainer>
+                <Image fill alt={name} src={image} />
+              </ProductDetailsImageContainer>
+              <ProductDetailsInfoContainer dense>
+                <ProductDetailsInfoItem>
+                  <ProductDetailsInfoItemText>{name}</ProductDetailsInfoItemText>
+                </ProductDetailsInfoItem>
+                <ProductDetailsInfoItem>
+                  <ProductDetailsInfoItemText>
+                    Category: {category}
+                  </ProductDetailsInfoItemText>
+                </ProductDetailsInfoItem>
+                <ProductDetailsInfoItem>
+                  <ProductDetailsInfoItemText>Brand: {brand}</ProductDetailsInfoItemText>
+                </ProductDetailsInfoItem>
+                <ProductDetailsInfoItem>
+                  <ProductDetailsInfoItemText>
+                    {rating} of {numReviews} reviews
+                  </ProductDetailsInfoItemText>
+                </ProductDetailsInfoItem>
+                <ProductDetailsInfoItem>
+                  <ProductDetailsInfoItemText>
+                    Description: {description}
+                  </ProductDetailsInfoItemText>
+                </ProductDetailsInfoItem>
+              </ProductDetailsInfoContainer>
+              <ProductPurchaseInfo
+                id={id}
+                price={`$${price}`}
+                status={status}
+                product={product}
+                renderAction={(orderItem: Product) => (
+                  <AddToCart orderItemId={orderItem.id} />
+                )}
+              />
+            </>
+          )}
         </ProductDetailsContent>
       </ProductDetailsContainer>
       <Footer />

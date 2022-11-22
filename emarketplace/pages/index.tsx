@@ -3,14 +3,14 @@ import { GetStaticProps } from 'next';
 
 import { MainLayout } from 'shared/layouts';
 import { Header, Footer } from 'widgets';
-import { typicodeApi, Product } from 'shared/api';
+import { typicodeApi, Product as IProduct } from 'shared/api';
 import { ProductCard } from 'entities/product';
 import { AddToCart } from 'features';
 
 import { ProductsListContainer, ProductsListItemContainer } from './styles';
 
-export const getStaticProps: GetStaticProps<{
-  products: typicodeApi.getProductsReturn;
+export const getServerSideProps: GetStaticProps<{
+  products: IProduct[];
 }> = async () => {
   const data = await typicodeApi.getProducts();
   return {
@@ -21,7 +21,7 @@ export const getStaticProps: GetStaticProps<{
 };
 
 interface Props {
-  products: typicodeApi.getProductsReturn;
+  products: IProduct[];
 }
 
 export default function Home({ products }: Props): ReactElement {
@@ -30,13 +30,13 @@ export default function Home({ products }: Props): ReactElement {
       <Header />
       <main>
         <ProductsListContainer>
-          {products.data.map((product) => (
+          {products.map((product) => (
             <ProductsListItemContainer key={product.id}>
               <ProductCard
                 key={product.id}
                 product={product}
-                renderAction={(orderItem: Product) => (
-                  <AddToCart orderItem={orderItem} numInStock={product.countInStock} />
+                renderAction={(orderItem: IProduct) => (
+                  <AddToCart orderItemId={orderItem.id} />
                 )}
               />
             </ProductsListItemContainer>

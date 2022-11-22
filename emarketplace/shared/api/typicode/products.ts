@@ -1,32 +1,39 @@
-import { faker } from '@faker-js/faker';
+import mongoose from 'mongoose';
+import { db } from 'shared/config';
+import { Product as IProduct } from './models';
 
-import { Product } from './models';
+const productSchema = new mongoose.Schema<IProduct>(
+  {
+    id: { type: String, unique: true },
+    name: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
+    category: { type: String, required: true },
+    image: { type: String, required: true },
+    price: { type: String, required: true },
+    brand: { type: String, required: true },
+    rating: { type: Number, required: true, default: 0 },
+    numReviews: { type: Number, required: true, default: 0 },
+    countInStock: { type: Number, required: true, default: 0 },
+    description: { type: String, required: true },
+  },
+  { timestamps: true }
+);
 
-export interface getProductsReturn {
-  data: Product[];
-}
+const Product =
+  mongoose.models.Product || mongoose.model<IProduct>('Product', productSchema);
 
-const mockData = new Array(20).fill(null).map((_, index) => ({
-  id: `${index + 1}`,
-  name: faker.commerce.product(),
-  slug: faker.datatype.uuid(),
-  category: faker.commerce.department(),
-  image: faker.image.technics(640, 480, true),
-  price: faker.commerce.price(0, 100),
-  brand: faker.commerce.department(),
-  rating: faker.datatype.number({ min: 0, max: 10, precision: 0.5 }),
-  numReviews: faker.datatype.number({ min: 0, max: 10000, precision: 1 }),
-  countInStock: faker.datatype.number({ min: 0, max: 10, precision: 1 }),
-  description: faker.commerce.productDescription(),
-}));
+export default Product;
 
-export const getProducts = async (): Promise<getProductsReturn> => {
-  return new Promise((res) => {
-    const timer = setTimeout(() => {
-      res({
-        data: mockData,
-      });
-      clearTimeout(timer);
-    }, 500);
-  });
+export const getProducts = async (): Promise<IProduct[]> => {
+  db.connect();
+  const data = await (Product as any).find().lean();
+  db.disconnect();
+  return data.map(db.convertDocToObj);
+};
+
+export const getProductById = async (id: string): Promise<IProduct> => {
+  db.connect();
+  const data = await (Product as any).findOne({ id }).lean();
+  db.disconnect();
+  return data ? db.convertDocToObj(data) : null;
 };

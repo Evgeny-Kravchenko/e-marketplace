@@ -1,7 +1,7 @@
 import NextAuth, { Session } from 'next-auth';
 import bycryptjs from 'bcryptjs';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import User from 'entities/user/model/User';
+import User from 'shared/api/typicode/users';
 import { db } from 'shared/config';
 
 export default NextAuth({

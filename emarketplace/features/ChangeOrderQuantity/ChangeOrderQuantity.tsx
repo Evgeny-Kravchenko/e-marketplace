@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { Select, SelectItemType } from 'shared/ui';
 import { addItemToOrder } from 'entities/order/model';
@@ -19,13 +20,16 @@ export const ChangeOrderQuantity = ({ orderItem }: Props): ReactElement => {
   const dispatch = useDispatch();
   const orderQantity = useOrderItemQuantityById(orderItem.id);
 
-  const onChange = (name: string, value: string): void => {
+  const onChange = (_: string, value: string): void => {
     dispatch(
       addItemToOrder({
-        orderItem,
-        numInStock: orderItem.countInStock,
+        orderItemId: orderItem.id,
         count: parseInt(value),
         replaceCount: true,
+        errorHandler: (message: string) => toast.error(message),
+        successAction: () => {
+          toast.success('Product is updated in the cart');
+        },
       })
     );
   };

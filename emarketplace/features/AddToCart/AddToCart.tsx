@@ -1,18 +1,17 @@
-import React, { ReactElement, PointerEvent } from 'react';
+import React, { ReactElement, PointerEvent, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 import { Button } from '@mui/material';
 
 import { addItemToOrder } from 'entities/order/model';
-import { Product } from 'shared/api';
 
 interface Props {
-  orderItem: Product;
-  numInStock: number;
+  orderItemId: string;
 }
 
-export const AddToCart = ({ orderItem, numInStock }: Props): ReactElement => {
+export const AddToCart = ({ orderItemId }: Props): ReactElement => {
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -20,8 +19,16 @@ export const AddToCart = ({ orderItem, numInStock }: Props): ReactElement => {
     e.stopPropagation();
     e.preventDefault();
 
-    dispatch(addItemToOrder({ orderItem, numInStock, count: 1 }));
-    router.push('/cart');
+    dispatch(
+      addItemToOrder({
+        orderItemId,
+        count: 1,
+        successAction: () => {
+          router.push('/cart');
+        },
+        errorHandler: (message: string) => toast.error(message),
+      })
+    );
   };
 
   return (

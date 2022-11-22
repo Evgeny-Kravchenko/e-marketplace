@@ -1,12 +1,5 @@
 import mongoose from 'mongoose';
-
-export interface IUser {
-  name: string;
-  email: string;
-  password: string;
-  isAdmin: boolean;
-  _id?: string;
-}
+import { User as IUser } from 'shared/api';
 
 const userSchema = new mongoose.Schema<IUser>(
   {
