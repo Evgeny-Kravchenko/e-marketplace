@@ -19,3 +19,7 @@ export interface DeliveiryAddress {
   postalCode: string;
   country: string;
 }
+
+export interface PaymentMethod {
+  value: string;
+}

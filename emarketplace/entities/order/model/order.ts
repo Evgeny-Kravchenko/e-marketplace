@@ -4,11 +4,14 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from 'app/store';
 import { Product } from 'shared/api';
-import { DeliveiryAddress } from 'shared/api';
+import { DeliveiryAddress, PaymentMethod } from 'shared/api';
 
 export interface OrderState {
   orderItems: { orderItem: Product; count: number }[];
   deliveryAddress: DeliveiryAddress;
+  paymentMethod: {
+    value: string;
+  };
 }
 
 const initialState: OrderState = {
@@ -19,6 +22,9 @@ const initialState: OrderState = {
     postalCode: '',
     city: '',
     country: '',
+  },
+  paymentMethod: {
+    value: '',
   },
 };
 
@@ -88,6 +94,9 @@ export const orderModel = createSlice({
     saveShippingAddress(state, action: PayloadAction<DeliveiryAddress>) {
       state.deliveryAddress = { ...state.deliveryAddress, ...action.payload };
     },
+    savePaymentMethod(state, action: PayloadAction<PaymentMethod>) {
+      state.paymentMethod = action.payload;
+    },
   },
 });
 
@@ -145,7 +154,28 @@ export const useOrderDelieveryAddress = (): DeliveiryAddress =>
     )
   );
 
+export const usePaymentMethod = (): PaymentMethod =>
+  useSelector(
+    createSelector(
+      (state: RootState) => state.order.paymentMethod,
+      (paymentMethod: PaymentMethod) => paymentMethod
+    )
+  );
+
+export const useIsDeliverInfo = (): boolean =>
+  useSelector(
+    createSelector(
+      (state: RootState) => state.order.deliveryAddress,
+      (deliveryAddress: DeliveiryAddress) => Boolean(deliveryAddress.fullName)
+    )
+  );
+
 // Action creators are generated for each case reducer function
-export const { addItemToOrder, deleteItemFromOrder, clearOrder, saveShippingAddress } =
-  orderModel.actions;
+export const {
+  addItemToOrder,
+  deleteItemFromOrder,
+  clearOrder,
+  saveShippingAddress,
+  savePaymentMethod,
+} = orderModel.actions;
 export const reducer = orderModel.reducer;
