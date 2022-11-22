@@ -4,13 +4,22 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from 'app/store';
 import { Product } from 'shared/api';
+import { DeliveiryAddress } from 'shared/api';
 
 export interface OrderState {
   orderItems: { orderItem: Product; count: number }[];
+  deliveryAddress: DeliveiryAddress;
 }
 
 const initialState: OrderState = {
   orderItems: [],
+  deliveryAddress: {
+    fullName: '',
+    address: '',
+    postalCode: '',
+    city: '',
+    country: '',
+  },
 };
 
 export const orderModel = createSlice({
@@ -26,22 +35,25 @@ export const orderModel = createSlice({
         replaceCount?: boolean;
       }>
     ) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
       if (!action.payload.numInStock) {
         return;
       }
       if (
         action.payload.replaceCount &&
-        action.payload.orderItem.countInStock > action.payload.count
+        action.payload.orderItem.countInStock >= action.payload.count
       ) {
         state.orderItems = state.orderItems.map((order) =>
           order.orderItem.id === action.payload.orderItem.id
             ? { ...order, count: action.payload.count }
             : order
         );
+        return;
+      }
+      if (
+        action.payload.replaceCount &&
+        action.payload.count > action.payload.numInStock
+      ) {
+        alert('Product is out of stock');
         return;
       }
       const qantityInCart = state.orderItems.find(
@@ -72,6 +84,9 @@ export const orderModel = createSlice({
     },
     clearOrder(state) {
       state.orderItems = [];
+    },
+    saveShippingAddress(state, action: PayloadAction<DeliveiryAddress>) {
+      state.deliveryAddress = { ...state.deliveryAddress, ...action.payload };
     },
   },
 });
@@ -122,6 +137,15 @@ export const useOrderItemQuantityById = (id: string): number =>
     )
   );
 
+export const useOrderDelieveryAddress = (): DeliveiryAddress =>
+  useSelector(
+    createSelector(
+      (state: RootState) => state.order.deliveryAddress,
+      (delieveryAddress: DeliveiryAddress) => delieveryAddress
+    )
+  );
+
 // Action creators are generated for each case reducer function
-export const { addItemToOrder, deleteItemFromOrder, clearOrder } = orderModel.actions;
+export const { addItemToOrder, deleteItemFromOrder, clearOrder, saveShippingAddress } =
+  orderModel.actions;
 export const reducer = orderModel.reducer;

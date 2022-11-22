@@ -6,9 +6,10 @@ import { addItemToOrder } from 'entities/order/model';
 import { Product } from 'shared/api';
 import { useOrderItemQuantityById } from 'entities/order/model';
 
-const items: SelectItemType[] = new Array(20)
-  .fill(null)
-  .map((_, index) => ({ title: `${index + 1}`, value: `${index + 1}` }));
+const generateItems = (countInStock: number): SelectItemType[] =>
+  new Array(countInStock)
+    .fill(null)
+    .map((_, index) => ({ title: `${index + 1}`, value: `${index + 1}` }));
 
 interface Props {
   orderItem: Product;
@@ -31,7 +32,7 @@ export const ChangeOrderQuantity = ({ orderItem }: Props): ReactElement => {
 
   return (
     <Select
-      items={items}
+      items={generateItems(orderItem.countInStock)}
       name='orderQuantity'
       value={String(orderQantity)}
       handleChange={onChange}

@@ -5,3 +5,4 @@ export * from './TextField';
 export * from './SeparateLabelInputWrapper';
 export * from './PageTitle';
 export * from './DropdownMenu';
+export * from './Stepper';

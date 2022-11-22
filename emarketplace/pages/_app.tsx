@@ -7,11 +7,12 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { SessionProvider } from 'next-auth/react';
+import { NextComponentType } from 'next';
 
-import theme from 'app/theming/theme';
-import createEmotionCache from 'app/theming/createEmotionCache';
+import { createEmotionCache, theme } from 'shared/theming';
 import { HttpServiceProvider, withStorageService } from 'shared/libs';
 import { store } from 'app/store';
+import { withAuth } from 'shared/hocs';
 
 const persistor = persistStore(store);
 
@@ -19,6 +20,7 @@ const persistor = persistStore(store);
 const clientSideEmotionCache = createEmotionCache();
 
 interface MyAppProps extends AppProps {
+  Component: NextComponentType & { auth?: boolean }; // add auth type
   emotionCache?: EmotionCache;
 }
 
@@ -29,6 +31,8 @@ function App(props: MyAppProps): ReactElement {
     pageProps: { session, ...pageProps },
   } = props;
 
+  const CurrentComponent = Component.auth ? withAuth(Component) : Component;
+
   return (
     <SessionProvider session={session}>
       <HttpServiceProvider>
@@ -38,7 +42,7 @@ function App(props: MyAppProps): ReactElement {
               <ThemeProvider theme={theme}>
                 {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                 <CssBaseline />
-                <Component {...pageProps} />
+                <CurrentComponent {...pageProps} />
               </ThemeProvider>
             </CacheProvider>
           </PersistGate>

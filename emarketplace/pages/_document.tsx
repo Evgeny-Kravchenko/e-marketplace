@@ -1,8 +1,7 @@
 import * as React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import createEmotionServer from '@emotion/server/create-instance';
-import theme, { roboto } from 'app/theming/theme';
-import createEmotionCache from 'app/theming/createEmotionCache';
+import { roboto, theme, createEmotionCache } from 'shared/theming';
 
 export default class MyDocument extends Document {
   render(): React.ReactElement {

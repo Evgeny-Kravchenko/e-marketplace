@@ -11,3 +11,11 @@ export interface Product {
   countInStock: number;
   description: string;
 }
+
+export interface DeliveiryAddress {
+  fullName: string;
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
