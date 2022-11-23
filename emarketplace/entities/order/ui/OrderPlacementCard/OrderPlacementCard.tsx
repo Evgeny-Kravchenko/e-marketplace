@@ -1,25 +1,28 @@
 import React, { ReactElement } from 'react';
-import Link from 'next/link';
-import { Typography, Link as MuiLink } from '@mui/material';
+import { Typography, Stack } from '@mui/material';
 
 import { Paper } from 'shared/ui';
 
 interface Props {
   title: string;
   children: ReactElement;
-  href: string;
+  renderAdditional?: () => ReactElement;
 }
 
-export const OrderPlacementCard = ({ title, children, href }: Props): ReactElement => {
+export const OrderPlacementCard = ({
+  title,
+  children,
+  renderAdditional,
+}: Props): ReactElement => {
   return (
     <Paper>
-      <Typography variant='h3' sx={{ fontSize: '2rem' }}>
-        {title}
-      </Typography>
-      {children}
-      <MuiLink component={Link} href={href} sx={{ display: 'block', mt: 2 }}>
-        Edit
-      </MuiLink>
+      <Stack spacing={2}>
+        <Typography variant='h3' sx={{ fontSize: '2rem' }}>
+          {title}
+        </Typography>
+        {children}
+        {renderAdditional && renderAdditional()}
+      </Stack>
     </Paper>
   );
 };

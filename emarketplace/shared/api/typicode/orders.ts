@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { Order as IOrder } from './models';
+import { db } from 'shared/config';
 
 const orderSchema = new mongoose.Schema<IOrder>(
   {
@@ -45,3 +46,10 @@ const orderSchema = new mongoose.Schema<IOrder>(
 const Order = mongoose.models.Order || mongoose.model<IOrder>('Order', orderSchema);
 
 export default Order;
+
+export const getOrderById = async (id: string): Promise<IOrder> => {
+  db.connect();
+  const data = await (Order as any).findById(id).lean();
+  db.disconnect();
+  return data ? db.convertDocToObj(data) : null;
+};

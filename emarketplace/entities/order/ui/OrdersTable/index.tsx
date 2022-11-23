@@ -79,7 +79,7 @@ const generateColumns: any = ({
 interface Props {
   data: { orderItem: Product; count: number }[];
   renderDeleteFeature?: (id: string) => ReactElement;
-  renderChangeQuantityFeature?: (orderItem: Product) => ReactElement;
+  renderChangeQuantityFeature?: (orderItem: Product & { count: number }) => ReactElement;
   additionalColumns?: ReadonlyArray<Column<object>>;
 }
 

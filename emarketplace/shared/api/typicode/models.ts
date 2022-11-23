@@ -44,4 +44,6 @@ export interface Order {
   paidAt?: Date;
   deliveredAt?: Date;
   _id?: string;
+  isDelivered?: boolean;
+  isPaid?: boolean;
 }

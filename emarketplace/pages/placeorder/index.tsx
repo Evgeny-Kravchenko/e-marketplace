@@ -1,6 +1,6 @@
 import React, { ReactElement, useMemo, useCallback, useEffect } from 'react';
 import Link from 'next/link';
-import { Typography } from '@mui/material';
+import { Typography, Link as MuiLink } from '@mui/material';
 import { CellProps, Column } from 'react-table';
 import { useRouter } from 'next/router';
 
@@ -84,17 +84,46 @@ const Content = withPurchaseProcessStepper(() => {
       {!isOrderItemsEmpty && (
         <ContentContainer>
           <CardsContainer spacing={2}>
-            <OrderPlacementCard title='Shipping Address' href='/shipping'>
+            <OrderPlacementCard
+              title='Shipping Address'
+              renderAdditional={() => (
+                <MuiLink
+                  component={Link}
+                  href='/shipping'
+                  sx={{ display: 'block', mt: 2 }}
+                >
+                  Edit
+                </MuiLink>
+              )}
+            >
               <Typography variant='body1' sx={{ fontSize: '1.8rem' }}>
                 {addressString}
               </Typography>
             </OrderPlacementCard>
-            <OrderPlacementCard title='Payment' href='/payment'>
+            <OrderPlacementCard
+              title='Payment'
+              renderAdditional={() => (
+                <MuiLink
+                  component={Link}
+                  href='/payment'
+                  sx={{ display: 'block', mt: 2 }}
+                >
+                  Edit
+                </MuiLink>
+              )}
+            >
               <Typography variant='body1' sx={{ fontSize: '1.8rem' }}>
                 {paymentMethod.value}
               </Typography>
             </OrderPlacementCard>
-            <OrderPlacementCard title='Order items' href='/cart'>
+            <OrderPlacementCard
+              title='Order items'
+              renderAdditional={() => (
+                <MuiLink component={Link} href='/cart' sx={{ display: 'block', mt: 2 }}>
+                  Edit
+                </MuiLink>
+              )}
+            >
               <OrdersTable
                 data={orderItems}
                 renderChangeQuantityFeature={changeOrderQuantity}

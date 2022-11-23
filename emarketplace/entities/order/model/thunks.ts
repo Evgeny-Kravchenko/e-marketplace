@@ -42,8 +42,8 @@ export const usePlaceOrderAsync = (
     {
       onSuccess: (data: Order) => {
         toast.success('Orders are placed successfully');
-        dispatch(clearOrder());
         router.push(`/order/${data._id}`);
+        dispatch(clearOrder());
       },
       onError: () => {
         toast.error('Something went wrong');

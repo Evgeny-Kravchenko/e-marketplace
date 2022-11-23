@@ -35,10 +35,7 @@ async function disconnect(): Promise<void> {
 }
 
 function convertDocToObj(doc: any): any {
-  doc._id = doc._id?.toString();
-  doc.createdAt = doc.createdAt?.toString();
-  doc.updatedAt = doc.updatedAt?.toString();
-  return doc;
+  return JSON.parse(JSON.stringify(doc));
 }
 
 export const db = { connect, disconnect, convertDocToObj };
