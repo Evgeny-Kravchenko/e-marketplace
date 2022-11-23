@@ -2,9 +2,9 @@ import React, {
   createContext,
   useContext,
   ReactElement,
-  useLayoutEffect,
   useState,
   ComponentType,
+  useEffect,
 } from 'react';
 import { BasicStorageService, StorageService } from './storageService';
 
@@ -23,7 +23,7 @@ interface Props {
 export function StorageServiceProvider({ children }: Props): ReactElement {
   const [storageService, setStorageService] = useState<BasicStorageService>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setStorageService(new StorageService(localStorage));
   }, []);
 

@@ -1,33 +1,39 @@
 import React, { ReactElement } from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
+import { useMutation } from '@tanstack/react-query';
 import { signIn } from 'next-auth/react';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 
 import { Typography, Stack, Button } from '@mui/material';
-
 import { SeparateLabelInputWrapper, TextField } from 'shared/ui';
+import { useHttpClient } from 'shared/libs';
+
+import { RegisterFormContainer } from './RegisterFormStyles';
+import { SignUp } from 'shared/api';
 import { getError } from 'shared/utils';
 
-import { SignInForm } from './SignInByCredentialsFormStyles';
-
-interface SignInForm {
+interface RegisterFormType {
+  name: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
-export const SignInByCredentialsForm = (): ReactElement => {
+export const RegisterForm = (): ReactElement => {
+  const httpClient = useHttpClient();
   const router = useRouter();
   const { redirect } = router.query;
 
-  const { register, handleSubmit, formState } = useForm<SignInForm>({
+  const { register, handleSubmit, formState, getValues } = useForm<RegisterFormType>({
     defaultValues: { email: '', password: '' },
     mode: 'onChange',
   });
 
-  const onSubmit = async (data: SignInForm): Promise<void> => {
-    try {
+  const { mutateAsync, isLoading } = useMutation(
+    async (data: SignUp) => {
+      await httpClient.post('/api/auth/signup', data);
       const result = await signIn('credentials', {
         redirect: false,
         email: data.email,
@@ -36,15 +42,41 @@ export const SignInByCredentialsForm = (): ReactElement => {
       if (result.error) {
         toast.error(result.error);
       }
-    } catch (err) {
-      toast.error(getError(err as Error));
+    },
+    {
+      onError: (err) => {
+        toast.error(getError(err));
+      },
     }
+  );
+
+  const onSubmit = async (data: RegisterFormType): Promise<void> => {
+    mutateAsync(data);
   };
 
   return (
-    <SignInForm onSubmit={handleSubmit(onSubmit)}>
+    <RegisterFormContainer onSubmit={handleSubmit(onSubmit)}>
       <Typography variant='h1' sx={{ fontSize: '3rem', fontWeight: 500 }}>
         <Stack spacing={2}>
+          <SeparateLabelInputWrapper
+            label='Name'
+            id='name'
+            helperText={formState.errors?.name?.message}
+            error={Boolean(formState.errors.name)}
+          >
+            <TextField
+              id='name'
+              error={Boolean(formState.errors.name)}
+              inputProps={{
+                autoFocus: true,
+                autoComplete: 'off',
+                type: 'text',
+                ...register('name', {
+                  required: 'Please enter a name',
+                }),
+              }}
+            />
+          </SeparateLabelInputWrapper>
           <SeparateLabelInputWrapper
             label='Login'
             id='login'
@@ -76,10 +108,37 @@ export const SignInByCredentialsForm = (): ReactElement => {
               error={Boolean(formState.errors.password)}
               inputProps={{
                 type: 'password',
-                autoComplete: 'current-password',
+                autoComplete: 'new-password',
                 ...register('password', {
                   required: 'Please enter a password',
                   minLength: { value: 6, message: 'password is more than 5 characters' },
+                }),
+              }}
+            />
+          </SeparateLabelInputWrapper>
+          <SeparateLabelInputWrapper
+            label='Confirm password'
+            id='confirm-password'
+            helperText={
+              formState.errors?.confirmPassword?.type === 'validate'
+                ? "Passwords don't match "
+                : formState.errors?.confirmPassword?.message
+            }
+            error={Boolean(formState.errors.confirmPassword)}
+          >
+            <TextField
+              id='confirmPassword'
+              error={Boolean(formState.errors.confirmPassword)}
+              inputProps={{
+                type: 'password',
+                autoComplete: 'confirm-password',
+                ...register('confirmPassword', {
+                  required: 'Please enter a password',
+                  validate: (value: string) => value === getValues('password'),
+                  minLength: {
+                    value: 6,
+                    message: 'confirm password is more than 5 characters',
+                  },
                 }),
               }}
             />
@@ -89,9 +148,9 @@ export const SignInByCredentialsForm = (): ReactElement => {
             variant='contained'
             color='secondary'
             sx={{ fontSize: '1.6rem' }}
-            disabled={!formState.isValid}
+            disabled={!formState.isValid || isLoading}
           >
-            Login
+            Register
           </Button>
           <Typography
             variant='body1'
@@ -100,11 +159,11 @@ export const SignInByCredentialsForm = (): ReactElement => {
               '& a': { color: (theme) => theme.palette.secondary.dark },
             }}
           >
-            Do you have an acoount?{' '}
+            Do not have an account?{' '}
             <Link href={`/register?redirect=${redirect || '/'}`}>Register</Link>
           </Typography>
         </Stack>
       </Typography>
-    </SignInForm>
+    </RegisterFormContainer>
   );
 };

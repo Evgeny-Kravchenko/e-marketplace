@@ -47,3 +47,9 @@ export interface Order {
   isDelivered?: boolean;
   isPaid?: boolean;
 }
+
+export interface SignUp {
+  name: string;
+  email: string;
+  password: string;
+}
