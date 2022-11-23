@@ -31,3 +31,17 @@ export interface User {
   isAdmin: boolean;
   _id?: string;
 }
+
+export interface Order {
+  user: unknown;
+  orderItems: { orderItem: Product; count: number }[];
+  shippingAddress: DeliveiryAddress;
+  paymentMethod: PaymentMethod;
+  itemsPrice: number;
+  shippingPrice: number;
+  taxPrice: number;
+  totalPrice: number;
+  paidAt?: Date;
+  deliveredAt?: Date;
+  _id?: string;
+}

@@ -15,7 +15,6 @@ export const RadioGroupButtons = ({
   inputProps,
   defaultValue,
 }: Props): ReactElement => {
-  console.log(inputProps.value);
   return (
     <FormControl>
       <RadioGroup

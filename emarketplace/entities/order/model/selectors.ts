@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { DeliveiryAddress, PaymentMethod, Product } from 'shared/api';
 import { RootState } from 'app/store';
+import { round2 } from 'shared/utils';
 
 export const useOrderCount = (): number =>
   useSelector(
@@ -71,3 +72,15 @@ export const useIsDeliverInfo = (): boolean =>
       (deliveryAddress: DeliveiryAddress) => Boolean(deliveryAddress.fullName)
     )
   );
+
+export const useTaxPrice = (): number => {
+  const itemsTotalPrice = useOrderTotalPrice();
+
+  return round2(itemsTotalPrice * 0.15);
+};
+
+export const useShippingPriceValue = (): number => {
+  const itemsTotalPrice = useOrderTotalPrice();
+
+  return itemsTotalPrice > 200 ? 0 : 15;
+};

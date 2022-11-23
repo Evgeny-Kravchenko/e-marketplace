@@ -14,9 +14,10 @@ const generateItems = (countInStock: number): SelectItemType[] =>
 
 interface Props {
   orderItem: Product;
+  readonly?: boolean;
 }
 
-export const ChangeOrderQuantity = ({ orderItem }: Props): ReactElement => {
+export const ChangeOrderQuantity = ({ orderItem, readonly }: Props): ReactElement => {
   const dispatch = useDispatch();
   const orderQantity = useOrderItemQuantityById(orderItem.id);
 
@@ -36,6 +37,7 @@ export const ChangeOrderQuantity = ({ orderItem }: Props): ReactElement => {
 
   return (
     <Select
+      disabled={readonly}
       items={generateItems(orderItem.countInStock)}
       name='orderQuantity'
       value={String(orderQantity)}

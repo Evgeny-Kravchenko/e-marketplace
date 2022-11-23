@@ -91,7 +91,10 @@ export const orderModel = createSlice({
       );
     },
     clearOrder(state) {
-      state.orderItems = [];
+      const { orderItems, paymentMethod, deliveryAddress } = initialState;
+      state.orderItems = orderItems;
+      state.paymentMethod = paymentMethod;
+      state.deliveryAddress = deliveryAddress;
     },
     saveShippingAddress(state, action: PayloadAction<DeliveiryAddress>) {
       state.deliveryAddress = { ...state.deliveryAddress, ...action.payload };
