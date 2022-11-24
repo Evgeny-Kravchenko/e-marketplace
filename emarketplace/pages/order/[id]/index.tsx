@@ -12,7 +12,7 @@ import { typicodeApi, Order } from 'shared/api';
 import { OrderPlacementCard, OrdersTable, OrderSummary } from 'entities/order/ui';
 import { Product } from 'shared/api';
 
-import { ContentContainer, CardsContainer, AsideContainer } from './styles';
+import { ContentContainer, CardsContainer, AsideContainer } from '../styles';
 import { PayPalBtnPayment } from 'features/Payment/PayPal';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -130,6 +130,6 @@ const Order = ({ order }: Props): ReactElement => {
   );
 };
 
-Order.auth = true;
+(Order as any).auth = true;
 
 export default Order;

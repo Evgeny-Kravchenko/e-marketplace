@@ -60,7 +60,11 @@ export const getOrderById = async (id: string): Promise<IOrder> => {
   return data ? db.convertDocToObj(data) : null;
 };
 
-export const getOrdersHistory = async ({ req }): Promise<IOrder[]> => {
+export const getOrdersHistory = async ({
+  req,
+}: {
+  req: any;
+}): Promise<IOrder[]> => {
   const session: any = await getSession({ req });
   const { _id } = session;
 

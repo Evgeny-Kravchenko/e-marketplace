@@ -9,7 +9,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
     return res.status(401).send('Signin required');
   }
 
-  const { _id } = session;
+  const { _id } = session as any;
 
   await db.connect();
   const newOrder = new Order({ ...req.body, user: _id });

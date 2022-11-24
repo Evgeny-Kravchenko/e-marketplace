@@ -1,4 +1,4 @@
-import React, { ReactElement, PointerEvent, useEffect } from 'react';
+import React, { ReactElement, PointerEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
@@ -27,7 +27,7 @@ export const AddToCart = ({ orderItemId }: Props): ReactElement => {
           router.push('/cart');
         },
         errorHandler: (message: string) => toast.error(message),
-      })
+      }) as any
     );
   };
 

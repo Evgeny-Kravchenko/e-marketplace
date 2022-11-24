@@ -46,7 +46,7 @@ function App(props: MyAppProps): ReactElement {
               <PersistGate loading={<p>Loading...</p>} persistor={persistor}>
                 <CacheProvider value={emotionCache}>
                   <ThemeProvider theme={theme}>
-                    <PayPalScriptProvider deferLoading>
+                    <PayPalScriptProvider deferLoading options={{ 'client-id': '' }}>
                       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                       <CssBaseline />
                       <CurrentComponent {...pageProps} />

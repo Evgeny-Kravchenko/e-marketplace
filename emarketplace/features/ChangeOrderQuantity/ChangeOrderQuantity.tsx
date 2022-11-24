@@ -31,7 +31,7 @@ export const ChangeOrderQuantity = ({ orderItem, readonly }: Props): ReactElemen
         successAction: () => {
           toast.success('Product is updated in the cart');
         },
-      })
+      }) as any
     );
   };
 
