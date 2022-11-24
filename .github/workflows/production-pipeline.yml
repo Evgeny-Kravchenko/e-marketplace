@@ -11,7 +11,7 @@ jobs:
     
     steps:
     - name: Go to app folder
-      run: cd ../../e-marketplace
+      run: cd ./e-marketplace
     - name: Instal packages
       run : yarn
     - name: Linting
