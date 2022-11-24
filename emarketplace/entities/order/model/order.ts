@@ -2,13 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { Product } from 'shared/api';
+import { Order, Product } from 'shared/api';
 import { DeliveiryAddress, PaymentMethod } from 'shared/api';
 
 import { addItemToOrder } from './thunks';
 
 export interface OrderState {
   orderItems: { orderItem: Product; count: number }[];
+  ordersHistory: Order[];
   deliveryAddress: DeliveiryAddress;
   paymentMethod: {
     value: string;
@@ -17,6 +18,7 @@ export interface OrderState {
 
 const initialState: OrderState = {
   orderItems: [],
+  ordersHistory: [],
   deliveryAddress: {
     fullName: '',
     address: '',

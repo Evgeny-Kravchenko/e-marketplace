@@ -43,6 +43,7 @@ export interface Order {
   totalPrice: number;
   paidAt?: Date | number;
   deliveredAt?: Date;
+  createdAt?: Date;
   _id?: string;
   isDelivered?: boolean;
   isPaid?: boolean;

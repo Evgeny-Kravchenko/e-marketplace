@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 
-import { DeliveiryAddress, PaymentMethod, Product } from 'shared/api';
+import { DeliveiryAddress, Order, PaymentMethod, Product } from 'shared/api';
 import { RootState } from 'app/store';
 import { round2 } from 'shared/utils';
 

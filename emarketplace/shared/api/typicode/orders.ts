@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { getSession } from 'next-auth/react';
 import { Order as IOrder } from './models';
 import { db } from 'shared/config';
 
@@ -57,4 +58,14 @@ export const getOrderById = async (id: string): Promise<IOrder> => {
   const data = await (Order as any).findById(id).lean();
   db.disconnect();
   return data ? db.convertDocToObj(data) : null;
+};
+
+export const getOrdersHistory = async ({ req }): Promise<IOrder[]> => {
+  const session: any = await getSession({ req });
+  const { _id } = session;
+
+  await db.connect();
+  const orders = await (Order as any).find({ user: _id });
+  await db.disconnect();
+  return orders ? db.convertDocToObj(orders) : null;
 };

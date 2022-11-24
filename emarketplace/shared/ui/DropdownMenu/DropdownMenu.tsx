@@ -23,7 +23,6 @@ export const DropdownMenu = ({ label, items }: Props): ReactElement => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = (action?: () => void) => (): void => {
-    console.log(1);
     setAnchorEl(null);
     if (typeof action === 'function') {
       action();
