@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    - name: Go to app folder
+      run: cd e-marketplace/
     - name: Instal packages
       run : yarn
     - name: Linting
