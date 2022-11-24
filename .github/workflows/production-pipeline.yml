@@ -10,15 +10,5 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Start linting
-      run : echo "Start linting"
-  
-  deployment:
-    runs-on: ubuntu-latest
-    needs: [linting]
-    
-    steps:
-    - name: Start linting
-      run : echo "Start deployment"
-    
-  
+    - name: Instal packages
+      run : yarn
