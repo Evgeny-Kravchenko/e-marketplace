@@ -12,3 +12,5 @@ jobs:
     steps:
     - name: Instal packages
       run : yarn
+    - name: Linting
+      run : yarn lint
