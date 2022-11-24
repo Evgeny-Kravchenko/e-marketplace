@@ -13,5 +13,5 @@ jobs:
     - name: Linting
       run: |
         ls
-        cd e-marketplace
+        cd emarketplace
         yarn lint
