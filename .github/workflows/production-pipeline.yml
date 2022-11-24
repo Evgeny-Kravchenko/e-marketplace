@@ -11,4 +11,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Linting
-      run : yarn lint
+      run: |
+        cd e-marketplace
+        yarn lint
