@@ -9,6 +9,7 @@ import { persistStore } from 'redux-persist';
 import { SessionProvider } from 'next-auth/react';
 import { NextComponentType } from 'next';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 
 import { createEmotionCache, theme } from 'shared/theming';
 import { HttpServiceProvider, withStorageService } from 'shared/libs';
@@ -43,9 +44,11 @@ function App(props: MyAppProps): ReactElement {
             <PersistGate loading={<p>Loading...</p>} persistor={persistor}>
               <CacheProvider value={emotionCache}>
                 <ThemeProvider theme={theme}>
-                  {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                  <CssBaseline />
-                  <CurrentComponent {...pageProps} />
+                  <PayPalScriptProvider deferLoading>
+                    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                    <CssBaseline />
+                    <CurrentComponent {...pageProps} />
+                  </PayPalScriptProvider>
                 </ThemeProvider>
               </CacheProvider>
             </PersistGate>

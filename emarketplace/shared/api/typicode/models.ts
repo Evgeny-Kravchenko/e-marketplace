@@ -41,11 +41,16 @@ export interface Order {
   shippingPrice: number;
   taxPrice: number;
   totalPrice: number;
-  paidAt?: Date;
+  paidAt?: Date | number;
   deliveredAt?: Date;
   _id?: string;
   isDelivered?: boolean;
   isPaid?: boolean;
+  paymentResult?: {
+    id: string;
+    status: string;
+    email_address: string;
+  };
 }
 
 export interface SignUp {

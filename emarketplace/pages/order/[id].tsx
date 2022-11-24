@@ -13,6 +13,7 @@ import { OrderPlacementCard, OrdersTable, OrderSummary } from 'entities/order/ui
 import { Product } from 'shared/api';
 
 import { ContentContainer, CardsContainer, AsideContainer } from './styles';
+import { PayPalBtnPayment } from 'features/Payment/PayPal';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params;
@@ -58,7 +59,9 @@ const Order = ({ order }: Props): ReactElement => {
     ];
   }, []);
 
-  const { isDelivered, isPaid } = order;
+  const { isDelivered, paidAt } = order;
+
+  const isPaid = Boolean(paidAt);
 
   return (
     <MainLayout title={`Order ${orderId}`}>
@@ -85,10 +88,7 @@ const Order = ({ order }: Props): ReactElement => {
             <OrderPlacementCard
               title='Payment'
               renderAdditional={() => (
-                <Alert
-                  color={isDelivered ? 'success' : 'error'}
-                  sx={{ fontSize: '1.4rem' }}
-                >
+                <Alert color={isPaid ? 'success' : 'error'} sx={{ fontSize: '1.4rem' }}>
                   {isPaid ? `Paid at ${order.paidAt}` : 'Not paid'}
                 </Alert>
               )}
@@ -111,6 +111,16 @@ const Order = ({ order }: Props): ReactElement => {
               tax={order.taxPrice}
               shipping={order.shippingPrice}
               total={order.totalPrice}
+              renderAction={
+                !isPaid
+                  ? () => (
+                      <PayPalBtnPayment
+                        totalPrice={order.totalPrice}
+                        orderId={order._id}
+                      />
+                    )
+                  : null
+              }
             />
           </AsideContainer>
         </ContentContainer>

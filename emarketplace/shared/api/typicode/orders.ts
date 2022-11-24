@@ -33,6 +33,11 @@ const orderSchema = new mongoose.Schema<IOrder>(
     paymentMethod: {
       value: { type: String, required: true },
     },
+    paymentResult: {
+      id: String,
+      status: String,
+      email_address: String,
+    },
     itemsPrice: { type: Number, required: true },
     shippingPrice: { type: Number, required: true },
     taxPrice: { type: Number, required: true },
