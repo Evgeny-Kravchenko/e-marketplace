@@ -11,7 +11,7 @@ jobs:
     
     steps:
     - name: Start linting
-    - run : echo "Start linting"
+      run : echo "Start linting"
   
   deployment:
     runs-on: ubuntu-latest
@@ -19,6 +19,6 @@ jobs:
     
     steps:
     - name: Start linting
-    - run : echo "Start deployment"
+      run : echo "Start deployment"
     
   
