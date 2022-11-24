@@ -13,8 +13,8 @@ jobs:
     
     steps:
     - name: Instal packages
-      working-directory: ./e-marketplace
+      working-directory: e-marketplace
       run : yarn
     - name: Linting
-      working-directory: ./e-marketplace
+      working-directory: e-marketplace
       run : yarn lint
