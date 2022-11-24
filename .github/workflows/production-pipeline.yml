@@ -13,5 +13,4 @@ jobs:
     
     steps:
     - name: Linting
-      working-directory: e-marketplace
       run : yarn lint
