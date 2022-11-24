@@ -5,13 +5,15 @@ on:
     branches:
       - master
       
+defaults:
+  run:
+    working-directory: ./e-marketplace
+      
 jobs:
   linting:
     runs-on: ubuntu-latest
     
-    defaults:
-      run:
-        working-directory: ./e-marketplace
+   
     
     steps:
     - name: Instal packages
