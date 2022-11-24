@@ -14,4 +14,4 @@ jobs:
       run: |
         ls
         cd emarketplace
-        yarn lint
+        npm run lint
