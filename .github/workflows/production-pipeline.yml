@@ -9,9 +9,11 @@ jobs:
   linting:
     runs-on: ubuntu-latest
     
+    defaults:
+      run:
+        working-directory: ./e-marketplace
+    
     steps:
-    - name: Go to app folder
-      run: cd e-marketplace
     - name: Instal packages
       run : yarn
     - name: Linting
