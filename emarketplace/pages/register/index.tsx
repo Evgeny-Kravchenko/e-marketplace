@@ -1,13 +1,20 @@
 import React, { ReactElement, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { styled } from '@mui/material';
 
 import { Header, Footer } from 'widgets';
 import { MainLayout } from 'shared/layouts';
 import { RegisterForm } from 'features/Auth';
 import { PageTitle } from 'shared/ui';
 
-import { SignInFormContainer } from './styles';
+const SignInFormContainer = styled('main')(() => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
+  flexGrow: 1,
+}));
 
 const Register = (): ReactElement => {
   const { data: session } = useSession();

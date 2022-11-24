@@ -1,7 +1,7 @@
 import React, { ReactElement, useCallback } from 'react';
 import Link from 'next/link';
 
-import { Typography } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 
 import { Header, Footer } from 'widgets';
 import { MainLayout } from 'shared/layouts';
@@ -16,11 +16,26 @@ import { DeleteFromCart, CheckoutOrder, ChangeOrderQuantity } from 'features';
 import { Product } from 'shared/api';
 import { PageTitle } from 'shared/ui';
 
-import {
-  ShoppingCartContentContainer,
-  ShoppingCartTableContainer,
-  ShoppingCartCheckoutContainer,
-} from './styles';
+const ShoppingCartContentContainer = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gap: theme.spacing(2),
+  gridTemplateColumns: 'repeat(1, 1fr)',
+  [theme.breakpoints.up('md')]: {
+    gridTemplateColumns: 'repeat(4, 1fr)',
+  },
+}));
+
+const ShoppingCartTableContainer = styled('div')(({ theme }) => ({
+  [theme.breakpoints.up('md')]: {
+    gridColumn: '1 / span 3',
+  },
+}));
+
+const ShoppingCartCheckoutContainer = styled('div')(({ theme }) => ({
+  [theme.breakpoints.up('md')]: {
+    gridColumn: '4 / span',
+  },
+}));
 
 const Cart = (): ReactElement => {
   const orderItems = useOrderItems();

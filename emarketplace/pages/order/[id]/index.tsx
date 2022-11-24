@@ -12,8 +12,38 @@ import { typicodeApi, Order } from 'shared/api';
 import { OrderPlacementCard, OrdersTable, OrderSummary } from 'entities/order/ui';
 import { Product } from 'shared/api';
 
-import { ContentContainer, CardsContainer, AsideContainer } from '../styles';
 import { PayPalBtnPayment } from 'features/Payment/PayPal';
+
+import { styled, Stack } from '@mui/material';
+
+const ContentContainer = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gap: theme.spacing(2),
+  gridTemplateColumns: '1fr',
+  [theme.breakpoints.up('md')]: {
+    gridTemplateColumns: 'repeat(6, 1fr)',
+  },
+}));
+
+const CardsContainer = styled(Stack)(({ theme }) => ({
+  gridColumn: '1 / 2',
+  [theme.breakpoints.up('md')]: {
+    gridColumn: '1 / span 4',
+  },
+  [theme.breakpoints.up('lg')]: {
+    gridColumn: '1 / span 5',
+  },
+}));
+
+const AsideContainer = styled('div')(({ theme }) => ({
+  gridColumn: '1 / 2',
+  [theme.breakpoints.up('md')]: {
+    gridColumn: '5 / 7',
+  },
+  [theme.breakpoints.up('lg')]: {
+    gridColumn: '6 / 7',
+  },
+}));
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params;
