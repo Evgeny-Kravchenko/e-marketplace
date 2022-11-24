@@ -1,0 +1,19 @@
+name: Production-pipeline
+
+on:
+  push:
+    branches:
+      - master
+      
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Start linting
+    - run: echo "Start linting"
+  
+  deployment:
+    runs-on: ubuntu-latest
+    
+  
