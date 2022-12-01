@@ -5,7 +5,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { Order, Product } from 'shared/api';
 import { DeliveiryAddress, PaymentMethod } from 'shared/api';
 
-import { addItemToOrder } from './thunks';
+// import { addItemToOrder } from './thunks';
 
 export interface OrderState {
   orderItems: { orderItem: Product; count: number }[];
@@ -34,59 +34,18 @@ const initialState: OrderState = {
 export const orderModel = createSlice({
   name: 'order',
   initialState,
-  extraReducers: (builder) => {
-    builder.addCase(addItemToOrder.fulfilled, (state, action) => {
-      if (!action.payload.orderItem.countInStock) {
-        action.payload.errorHandler('Product is out of stock');
-        return;
-      }
-      if (
-        action.payload.replaceCount &&
-        action.payload.orderItem.countInStock >= action.payload.count
-      ) {
-        state.orderItems = state.orderItems.map((order) =>
-          order.orderItem.id === action.payload.orderItem.id
-            ? { ...order, count: action.payload.count }
-            : order
-        );
-        action.payload.successAction && action.payload.successAction();
-        return;
-      }
-      if (
-        action.payload.replaceCount &&
-        action.payload.count > action.payload.orderItem.countInStock
-      ) {
-        action.payload.errorHandler('Product is out of stock');
-        return;
-      }
-      const qantityInCart = state.orderItems.find(
-        (item) => item.orderItem.id === action.payload.orderItem.id
-      );
-
-      if (qantityInCart) {
-        if (
-          qantityInCart.count + action.payload.count >
-          action.payload.orderItem.countInStock
-        ) {
-          action.payload.errorHandler('Product is out of stock');
-          return;
-        }
-        state.orderItems = state.orderItems.map((order) =>
-          order.orderItem.id === action.payload.orderItem.id
-            ? { ...order, count: order.count + action.payload.count }
-            : order
-        );
-        action.payload.successAction && action.payload.successAction();
-      } else {
-        state.orderItems.push({
-          orderItem: action.payload.orderItem,
-          count: action.payload.count,
-        });
-        action.payload.successAction && action.payload.successAction();
-      }
-    });
-  },
   reducers: {
+    addItemToOrder() {
+      // for saga
+      console.log('Slice add item to order action');
+    },
+    setOrderItems(
+      state,
+      action: PayloadAction<{ orderItems: { orderItem: Product; count: number }[] }>
+    ) {
+      console.log('Slice set order items action');
+      state.orderItems = action.payload.orderItems;
+    },
     deleteItemFromOrder(state, action: PayloadAction<{ id: string }>) {
       state.orderItems = state.orderItems.filter(
         (item) => item.orderItem.id !== action.payload.id
@@ -106,6 +65,12 @@ export const orderModel = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { deleteItemFromOrder, clearOrder, saveShippingAddress, savePaymentMethod } =
-  orderModel.actions;
+export const {
+  deleteItemFromOrder,
+  clearOrder,
+  saveShippingAddress,
+  savePaymentMethod,
+  addItemToOrder,
+  setOrderItems,
+} = orderModel.actions;
 export const reducer = orderModel.reducer;

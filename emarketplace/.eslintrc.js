@@ -16,6 +16,7 @@ module.exports = {
     'plugin:jsx-a11y/recommended', // Accessibility rules#
     'plugin:prettier/recommended', // Prettier plugin
     'next/core-web-vitals',
+    'plugin:cypress/recommended',
   ],
   rules: {
     'react/prop-types': 'off',
@@ -40,6 +41,7 @@ module.exports = {
       { allowExpressions: true },
     ],
   },
+  plugins: ['cypress'],
   settings: {
     react: {
       version: 'detect',
